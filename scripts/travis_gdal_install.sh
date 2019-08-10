@@ -52,7 +52,13 @@ fi
 
 ls -l $GDALINST
 
-if [ "$GDALVERSION" = "master" ]; then
+GDAL_DEB_PATH="gdal_${GDALVERSION}_proj_${PROJVERSION}-1_amd64_${DISTRIB_CODENAME}.deb"
+if ( curl -o/dev/null -sfI "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PATH" ); then
+  # install deb when available
+  
+  wget "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PATH"
+  sudo dpkg -i "$GDAL_DEB_PATH"
+elif [ "$GDALVERSION" = "master" ]; then
     PROJOPT="--with-proj=$GDALINST/gdal-$GDALVERSION"
     cd $GDALBUILD
     git clone --depth 1 https://github.com/OSGeo/gdal gdal-$GDALVERSION
