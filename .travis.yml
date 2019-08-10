@@ -33,18 +33,19 @@ addons:
   apt:
     packages:
     - libhdf5-serial-dev
-    - libgdal-dev
     - libatlas-dev
     - libatlas-base-dev
     - gfortran
 
 before_install:
+  - export DISTRIB_CODENAME=$(lsb_release -cs)
   - python -m pip install -U pip
   - python -m pip install wheel
   - export PATH=$GDALINST/gdal-$GDALVERSION/bin:$PROJINST/proj-$PROJVERSION/bin:$PATH
   - export LD_LIBRARY_PATH=$GDALINST/gdal-$GDALVERSION/lib:$PROJINST/proj-$PROJVERSION/lib:$LD_LIBRARY_PATH
-  - travis_wait 20 . ./scripts/travis_proj_install.sh
-  - travis_wait 20 . ./scripts/travis_gdal_install.sh
+  # TODO revert removal of travis_wait 20
+  - . ./scripts/travis_proj_install.sh
+  - . ./scripts/travis_gdal_install.sh
   - export GDAL_DATA=$GDALINST/gdal-$GDALVERSION/share/gdal
   - export PROJ_LIB=$PROJINST/proj-$PROJVERSION/share/proj
 
