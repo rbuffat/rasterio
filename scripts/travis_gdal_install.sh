@@ -3,7 +3,12 @@
 # originally contributed by @rbuffat to Toblerity/Fiona
 set -e
 
-GDALOPTS="  --with-geos \
+# TODO debug
+rm -rf $GDALBUILD
+rm -rf $GDALINST
+
+GDALOPTS="  --with-ogr \
+            --with-geos \
             --with-expat \
             --without-libtool \
             --with-libz=internal \
@@ -35,11 +40,17 @@ GDALOPTS="  --with-geos \
             --without-xerces \
             --without-odbc \
             --with-curl \
-            --without-sqlite3 \
+            --with-sqlite3 \
+            --without-dwgdirect \
             --without-idb \
             --without-sde \
             --without-perl \
-            --without-python"
+            --without-php \
+            --without-ruby \
+            --without-python
+            --with-oci=no \
+            --without-mrf \
+            --with-webp=no"
 
 # Create build dir if not exists
 if [ ! -d "$GDALBUILD" ]; then
@@ -52,13 +63,13 @@ fi
 
 ls -l $GDALINST
 
-GDAL_DEB_PATH="gdal_${GDALVERSION}_proj_${PROJVERSION}-1_amd64_${DISTRIB_CODENAME}.deb"
-if ( curl -o/dev/null -sfI "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PATH" ); then
-  # install deb when available
-  
-  wget "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PATH"
-  sudo dpkg -i "$GDAL_DEB_PATH"
-elif [ "$GDALVERSION" = "master" ]; then
+# GDAL_DEB_PATH="gdal_${GDALVERSION}_proj_${PROJVERSION}-1_amd64_${DISTRIB_CODENAME}.deb"
+# if ( curl -o/dev/null -sfI "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PATH" ); then
+#   install deb when available
+#   
+#   wget "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PATH"
+#   sudo dpkg -i "$GDAL_DEB_PATH"
+if [ "$GDALVERSION" = "master" ]; then
     PROJOPT="--with-proj=$GDALINST/gdal-$GDALVERSION"
     cd $GDALBUILD
     git clone --depth 1 https://github.com/OSGeo/gdal gdal-$GDALVERSION
