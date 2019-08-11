@@ -70,7 +70,7 @@ ls -l $GDALINST
 #   wget "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PATH"
 #   sudo dpkg -i "$GDAL_DEB_PATH"
 if [ "$GDALVERSION" = "master" ]; then
-    PROJOPT="--with-proj=$GDALINST/gdal-$GDALVERSION"
+    PROJOPT="--with-proj=$PROJINST/proj-$PROJVERSION"
     cd $GDALBUILD
     git clone --depth 1 https://github.com/OSGeo/gdal gdal-$GDALVERSION
     cd gdal-$GDALVERSION/gdal
@@ -93,25 +93,25 @@ if [ "$GDALVERSION" = "master" ]; then
 else
     case "$GDALVERSION" in
         3*)
-            PROJOPT="--with-proj=$GDALINST/gdal-$GDALVERSION"
+            PROJOPT="--with-proj=$PROJINST/proj-$PROJVERSION"
             ;;
         2.4*)
-            PROJOPT="--with-proj=$GDALINST/gdal-$GDALVERSION"
+            PROJOPT="--with-proj=$PROJINST/proj-$PROJVERSION"
             ;;
         2.3*)
-            PROJOPT="--with-proj=$GDALINST/gdal-$GDALVERSION"
+            PROJOPT="--with-proj=$PROJINST/proj-$PROJVERSION"
             ;;
         2.2*)
-            PROJOPT="--with-static-proj4=$GDALINST/gdal-$GDALVERSION"
+            PROJOPT="--with-static-proj4=$PROJINST/proj-$PROJVERSION"
             ;;
         2.1*)
-            PROJOPT="--with-static-proj4=$GDALINST/gdal-$GDALVERSION"
+            PROJOPT="--with-static-proj4=$PROJINST/proj-$PROJVERSION"
             ;;
         2.0*)
-            PROJOPT="--with-static-proj4=$GDALINST/gdal-$GDALVERSION"
+            PROJOPT="--with-static-proj4=$PROJINST/proj-$PROJVERSION"
             ;;
         1*)
-            PROJOPT="--with-static-proj4=$GDALINST/gdal-$GDALVERSION"
+            PROJOPT="--with-static-proj4=$PROJINST/proj-$PROJVERSION"
             ;;
     esac
 
@@ -121,6 +121,10 @@ else
         wget -q http://download.osgeo.org/gdal/$gdalver/gdal-$GDALVERSION.tar.gz
         tar -xzf gdal-$GDALVERSION.tar.gz
         cd gdal-$gdalver
+        
+        echo $GDALOPTS
+        echo $PROJOPT
+        
         ./configure --prefix=$GDALINST/gdal-$GDALVERSION $GDALOPTS $PROJOPT
         make -s -j 2
         make install
