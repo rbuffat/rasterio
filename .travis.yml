@@ -49,8 +49,7 @@ before_install:
   # TODO revert removal of travis_wait 20
   - . ./scripts/travis_proj_install.sh
   - . ./scripts/travis_gdal_install.sh
-  - export GDAL_DATA=$GDALINST/gdal-$GDALVERSION/share/gdal
-  - export PROJ_LIB=$PROJINST/proj-$PROJVERSION/share/proj
+
 
 install:
   - "if [ \"$GDALVERSION\" == \"master\" -o $(gdal-config --version) == \"$GDALVERSION\" ]; then echo \"Using gdal $GDALVERSION\"; else echo \"NOT using gdal $GDALVERSION as expected; aborting\"; exit 1; fi"
@@ -60,6 +59,11 @@ install:
   - "python -m pip install coveralls>=1.1"
   - "rio --version"
   - "rio --gdal-version"
+  - gdal-config --version
+  - gdal-config --dep-libs
+  - gdal-config --libs
+  - gdal-config --cflags
+  - gdal-config --datadir
   - "python -m pip list"
 
 before_script:

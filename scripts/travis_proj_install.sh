@@ -20,8 +20,12 @@ echo "PROJ VERSION: $PROJVERSION"
 PROJ_DEB_PATH="proj_${PROJVERSION}-1_amd64_${DISTRIB_CODENAME}.deb"
 if ( curl -o/dev/null -sfI "https://rbuffat.github.io/gdal_builder/$PROJ_DEB_PATH" ); then
     # We install proj deb if available
+    
+    rm -rf $PROJBUILD
+    rm -rf $PROJINST
 
-    wget "https://rbuffat.github.io/gdal_builder/$PROJ_DEB_PATH"
+    echo "Install deb from https://rbuffat.github.io/gdal_builder/$PROJ_DEB_PATH"
+    wget -q "https://rbuffat.github.io/gdal_builder/$PROJ_DEB_PATH"
     sudo dpkg -i "$PROJ_DEB_PATH"
 
 else
