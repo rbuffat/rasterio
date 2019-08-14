@@ -19,7 +19,7 @@ env:
     - PROJBUILD=$HOME/projbuild
 
   matrix:
-    - GDALVERSION="1.11.5" PROJVERSION="4.8.0"
+    - GDALVERSION="1.11.5" PROJVERSION="4.9.3"
     - GDALVERSION="2.0.3" PROJVERSION="4.9.3"
     - GDALVERSION="2.1.4" PROJVERSION="4.9.3"
     - GDALVERSION="2.2.4" PROJVERSION="4.9.3"
@@ -39,23 +39,27 @@ addons:
     - libatlas-dev
     - libatlas-base-dev
     - gfortran
+    - libsqlite3-dev
+    - sqlite3
 
+    
 before_install:
   - export DISTRIB_CODENAME=$(lsb_release -cs)
+  - export PROJ_DEBUG=ON
   - python -m pip install -U pip
   - python -m pip install wheel
   - export PATH=$GDALINST/gdal-$GDALVERSION/bin:$PROJINST/proj-$PROJVERSION/bin:$PATH
   - export LD_LIBRARY_PATH=$GDALINST/gdal-$GDALVERSION/lib:$PROJINST/proj-$PROJVERSION/lib:$LD_LIBRARY_PATH
+  - export GDAL_DATA=$GDALINST/gdal-$GDALVERSION/share/gdal
+  - export PROJ_LIB=$PROJINST/proj-$PROJVERSION/share/proj
   # TODO revert removal of travis_wait 20
   - . ./scripts/travis_proj_install.sh
   - . ./scripts/travis_gdal_install.sh
-  - export GDAL_DATA=$GDALINST/gdal-$GDALVERSION/share/gdal
-  - export PROJ_LIB=$PROJINST/proj-$PROJVERSION/share/proj
+
 
 install:
   - "if [ \"$GDALVERSION\" == \"master\" -o $(gdal-config --version) == \"$GDALVERSION\" ]; then echo \"Using gdal $GDALVERSION\"; else echo \"NOT using gdal $GDALVERSION as expected; aborting\"; exit 1; fi"
-  - "python -m pip wheel -r requirements-dev.txt"
-  - "python -m pip install -r requirements-dev.txt"
+  - "python -m pip install --upgrade --force-reinstall -r requirements-dev.txt"
   - "GDAL_CONFIG=$GDALINST/gdal-$GDALVERSION/bin/gdal-config python -m pip install --upgrade --force-reinstall --no-use-pep517 -e .[test,plot]"
   - "python -m pip install coveralls>=1.1"
   - "rio --version"
@@ -74,7 +78,7 @@ after_success:
   - coveralls || echo "!! intermittent coveralls failure"
 
 
-cache:
-  directories:
-    - $GDALINST
-    - ~/.cache/pip
+#cache:
+  #directories:
+    #- $GDALINST
+    #- ~/.cache/pip
