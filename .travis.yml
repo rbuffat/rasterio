@@ -46,6 +46,7 @@ addons:
 before_install:
   - export DISTRIB_CODENAME=$(lsb_release -cs)
   - export PROJ_DEBUG=ON
+  - export CPL_DEBUG=True
   - python -m pip install -U pip
   - python -m pip install wheel
   - export PATH=$GDALINST/gdal-$GDALVERSION/bin:$PROJINST/proj-$PROJVERSION/bin:$PATH
