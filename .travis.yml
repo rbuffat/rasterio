@@ -2,6 +2,8 @@ dist: xenial
 
 language: python
 
+sudo: true
+
 python:
   - "2.7"
   - "3.6"
@@ -31,6 +33,7 @@ env:
 matrix:
   allow_failures:
     - env: GDALVERSION="master" PROJVERSION="6.1.1"
+
 
 addons:
   apt:

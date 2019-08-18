@@ -27,6 +27,8 @@ if ( curl -o/dev/null -sfI "https://rbuffat.github.io/gdal_builder/$PROJ_DEB_PAT
 
     wget "https://rbuffat.github.io/gdal_builder/$PROJ_DEB_PATH"
     sudo dpkg -i "$PROJ_DEB_PATH"
+    
+    sudo chown -R root:root $PROJINST
 
 else
 

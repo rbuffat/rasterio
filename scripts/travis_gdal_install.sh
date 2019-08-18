@@ -69,6 +69,8 @@ if ( curl -o/dev/null -sfI "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PAT
   
   wget "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PATH"
   sudo dpkg -i "$GDAL_DEB_PATH"
+  
+  sudo chown -R root:root $GDALINST
 
 elif [ "$GDALVERSION" = "master" ]; then
     PROJOPT="--with-proj=$PROJINST/proj-$PROJVERSION"
