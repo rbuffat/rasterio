@@ -3,9 +3,6 @@
 # originally contributed by @rbuffat to Toblerity/Fiona
 set -e
 
-# TODO debug
-rm -rf $GDALBUILD
-rm -rf $GDALINST
 
 GDALOPTS="  --with-ogr \
             --with-geos \
@@ -71,9 +68,14 @@ if ( curl -o/dev/null -sfI "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PAT
   sudo dpkg -i "$GDAL_DEB_PATH"
   
   sudo chown -R travis:travis $GDALINST
+  
+  echo $GDAL_DATA
+  ls -lh $GDAL_DATA
+  echo $PROJ_LIB
+  ls -lh $PROJ_LIB
 
 elif [ "$GDALVERSION" = "master" ]; then
-    PROJOPT="--with-proj=$PROJINST/proj-$PROJVERSION"
+    PROJOPT="--with-proj=$GDALINST/proj-$PROJVERSION"
     cd $GDALBUILD
     git clone --depth 1 https://github.com/OSGeo/gdal gdal-$GDALVERSION
     cd gdal-$GDALVERSION/gdal
@@ -96,25 +98,25 @@ elif [ "$GDALVERSION" = "master" ]; then
 else
     case "$GDALVERSION" in
         3*)
-            PROJOPT="--with-proj=$PROJINST/proj-$PROJVERSION"
+            PROJOPT="--with-proj=$GDALINST/proj-$PROJVERSION"
             ;;
         2.4*)
-            PROJOPT="--with-proj=$PROJINST/proj-$PROJVERSION"
+            PROJOPT="--with-proj=$GDALINST/proj-$PROJVERSION"
             ;;
         2.3*)
-            PROJOPT="--with-proj=$PROJINST/proj-$PROJVERSION"
+            PROJOPT="--with-proj=$GDALINST/proj-$PROJVERSION"
             ;;
         2.2*)
-            PROJOPT="--with-static-proj4=$PROJINST/proj-$PROJVERSION"
+            PROJOPT="--with-static-proj4=$GDALINST/proj-$PROJVERSION"
             ;;
         2.1*)
-            PROJOPT="--with-static-proj4=$PROJINST/proj-$PROJVERSION"
+            PROJOPT="--with-static-proj4=$GDALINST/proj-$PROJVERSION"
             ;;
         2.0*)
-            PROJOPT="--with-static-proj4=$PROJINST/proj-$PROJVERSION"
+            PROJOPT="--with-static-proj4=$GDALINST/proj-$PROJVERSION"
             ;;
         1*)
-            PROJOPT="--with-static-proj4=$PROJINST/proj-$PROJVERSION"
+            PROJOPT="--with-static-proj4=$GDALINST/proj-$PROJVERSION"
             ;;
     esac
 
