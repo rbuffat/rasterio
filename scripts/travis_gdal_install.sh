@@ -63,14 +63,14 @@ fi
 
 ls -l $GDALINST
 
-GDAL_DEB_PATH="gdal_${GDALVERSION}_proj_${PROJVERSION}-1_amd64_${DISTRIB_CODENAME}.deb"
+GDAL_DEB_PATH="gdal_${GDALVERSION}_proj_${PROJVERSION}_${DISTRIB_CODENAME}.deb"
 if ( curl -o/dev/null -sfI "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PATH" ); then
 #   install deb when available
   
   wget "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PATH"
   sudo dpkg -i "$GDAL_DEB_PATH"
   
-  sudo chown -R root:root $GDALINST
+  sudo chown -R travis:travis $GDALINST
 
 elif [ "$GDALVERSION" = "master" ]; then
     PROJOPT="--with-proj=$PROJINST/proj-$PROJVERSION"

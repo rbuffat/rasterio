@@ -17,11 +17,10 @@ env:
     - PIP_FIND_LINKS=file://$HOME/.cache/pip/wheels
     - GDALINST=$HOME/gdalinstall
     - GDALBUILD=$HOME/gdalbuild
-    - PROJINST=$HOME/projinstall
     - PROJBUILD=$HOME/projbuild
 
   matrix:
-    - GDALVERSION="1.11.5" PROJVERSION="4.9.3"
+    - GDALVERSION="1.11.5" PROJVERSION="4.8.0"
     - GDALVERSION="2.0.3" PROJVERSION="4.9.3"
     - GDALVERSION="2.1.4" PROJVERSION="4.9.3"
     - GDALVERSION="2.2.4" PROJVERSION="4.9.3"
@@ -52,10 +51,10 @@ before_install:
   - export CPL_DEBUG=True
   - python -m pip install -U pip
   - python -m pip install wheel
-  - export PATH=$GDALINST/gdal-$GDALVERSION/bin:$PROJINST/proj-$PROJVERSION/bin:$PATH
-  - export LD_LIBRARY_PATH=$GDALINST/gdal-$GDALVERSION/lib:$PROJINST/proj-$PROJVERSION/lib:$LD_LIBRARY_PATH
+  - export PATH=$GDALINST/gdal-$GDALVERSION/bin:$PATH
+  - export LD_LIBRARY_PATH=$GDALINST/gdal-$GDALVERSION/lib:$LD_LIBRARY_PATH
   - export GDAL_DATA=$GDALINST/gdal-$GDALVERSION/share/gdal
-  - export PROJ_LIB=$PROJINST/proj-$PROJVERSION/share/proj
+  - export PROJ_LIB=$GDALINST/gdal-$GDALVERSION/share/proj
   # TODO revert removal of travis_wait 20
   - . ./scripts/travis_proj_install.sh
   - . ./scripts/travis_gdal_install.sh
