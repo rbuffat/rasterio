@@ -18,6 +18,7 @@ env:
     - GDALINST=$HOME/gdalinstall
     - GDALBUILD=$HOME/gdalbuild
     - PROJBUILD=$HOME/projbuild
+    #- FORCE_BUILD="yes"
 
   matrix:
     - GDALVERSION="1.11.5" PROJVERSION="4.8.0"

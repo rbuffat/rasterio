@@ -61,7 +61,7 @@ fi
 ls -l $GDALINST
 
 GDAL_DEB_PATH="gdal_${GDALVERSION}_proj_${PROJVERSION}_${DISTRIB_CODENAME}.deb"
-if ( curl -o/dev/null -sfI "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PATH" ); then
+if ( curl -o/dev/null -sfI "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PATH" ) && [ ! $FORCE_BUILD="yes" ]; then
 #   install deb when available
   
   wget "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PATH"
@@ -98,9 +98,9 @@ elif [ "$GDALVERSION" = "master" ]; then
 else
 
     if $(dpkg --compare-versions "$GDALVERSION" "lt" "2.3"); then
-        GDALOPTS_PROJ="--with-static-proj4=$GDALINST/gdal-$GDALVERSION";
+        PROJOPT="--with-static-proj4=$GDALINST/gdal-$GDALVERSION";
     else
-        GDALOPTS_PROJ="--with-proj=$GDALINST/gdal-$GDALVERSION";
+        PROJOPT="--with-proj=$GDALINST/gdal-$GDALVERSION";
     fi
 
 
