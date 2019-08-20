@@ -61,7 +61,7 @@ fi
 ls -l $GDALINST
 
 GDAL_DEB_PATH="gdal_${GDALVERSION}_proj_${PROJVERSION}_${DISTRIB_CODENAME}.deb"
-if ( curl -o/dev/null -sfI "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PATH" ) && [ ! $FORCE_BUILD="yes" ]; then
+if ( curl -o/dev/null -sfI "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PATH" ) && [ ! $FORCE_GDAL_BUILD="yes" ]; then
 #   install deb when available
   
   wget "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PATH"
@@ -75,6 +75,7 @@ if ( curl -o/dev/null -sfI "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PAT
   ls -lh $PROJ_LIB
 
 elif [ "$GDALVERSION" = "master" ]; then
+
     PROJOPT="--with-proj=$GDALINST/gdal-$GDALVERSION"
     cd $GDALBUILD
     git clone --depth 1 https://github.com/OSGeo/gdal gdal-$GDALVERSION
@@ -119,6 +120,8 @@ else
         make install
     fi
 fi
+
+find $GDALINST
 
 # change back to travis build dir
 cd $TRAVIS_BUILD_DIR
