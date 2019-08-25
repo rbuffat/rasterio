@@ -27,6 +27,7 @@ if ( curl -o/dev/null -sfI "https://rbuffat.github.io/gdal_builder/$PROJ_DEB_NAM
     sudo dpkg -i "$PROJ_DEB_NAME"
     sudo chown -R travis:travis $PROJINST
 
+else
 # Otherwise we compile proj from source
 
     if [ ! -d "$PROJINST/proj-$PROJVERSION" ]; then
