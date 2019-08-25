@@ -65,7 +65,7 @@ GDAL_DEB_URL="https://rbuffat.github.io/gdal_builder/$GDAL_DEB_NAME"
 
 echo "$GDAL_DEB_URL"
 
-if ( curl -o/dev/null -sfI "$GDAL_DEB_URL$" ) && [ "$FORCE_GDAL_BUILD" != "yes" ]; then
+if ( curl -o/dev/null -sfI "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_NAME" ) && [ "$FORCE_GDAL_BUILD" != "yes" ]; then
 #   install deb when available
   
   wget "$GDAL_DEB_URL"

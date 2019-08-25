@@ -20,7 +20,7 @@ PROJ_DEB_URL="https://rbuffat.github.io/gdal_builder/$PROJ_DEB_NAME"
 
 echo "$PROJ_DEB_URL"
 
-if ( curl -o/dev/null -sfI "$PROJ_DEB_URL" ) && [ "$FORCE_GDAL_BUILD" != "yes" ]; then
+if ( curl -o/dev/null -sfI "https://rbuffat.github.io/gdal_builder/$PROJ_DEB_NAME" ) && [ "$FORCE_GDAL_BUILD" != "yes" ]; then
 
     # We install proj deb if available
     wget "$PROJ_DEB_URL"
