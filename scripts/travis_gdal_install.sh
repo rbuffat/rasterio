@@ -58,25 +58,24 @@ if [ ! -d "$GDALINST" ]; then
   mkdir $GDALINST;
 fi
 
-ls -l $GDALINST
+echo "GDAL VERSION: $GDALVERSION FORCE_GDAL_BUILD: $FORCE_GDAL_BUILD" 
 
-GDAL_DEB_PATH="gdal_${GDALVERSION}_proj_${PROJVERSION}_${DISTRIB_CODENAME}.deb"
-if ( curl -o/dev/null -sfI "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PATH" ) && ["$FORCE_GDAL_BUILD" != "yes" ]; then
+GDAL_DEB_NAME="gdal_${GDALVERSION}_proj_${PROJVERSION}-1_amd64_${DISTRIB_CODENAME}.deb"
+GDAL_DEB_URL="https://rbuffat.github.io/gdal_builder/$GDAL_DEB_NAME"
+
+echo "$GDAL_DEB_URL"
+
+if ( curl -o/dev/null -sfI "$GDAL_DEB_URL$" ) && [ "$FORCE_GDAL_BUILD" != "yes" ]; then
 #   install deb when available
   
-  wget "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_PATH"
-  sudo dpkg -i "$GDAL_DEB_PATH"
+  wget "$GDAL_DEB_URL"
+  sudo dpkg -i "$GDAL_DEB_NAME"
   
   sudo chown -R travis:travis $GDALINST
   
-  echo $GDAL_DATA
-  ls -lh $GDAL_DATA
-  echo $PROJ_LIB
-  ls -lh $PROJ_LIB
-
 elif [ "$GDALVERSION" = "master" ]; then
 
-    PROJOPT="--with-proj=$GDALINST/gdal-$GDALVERSION"
+    PROJOPT="--with-proj=$PROJINST/proj-$PROJVERSION"
     cd $GDALBUILD
     git clone --depth 1 https://github.com/OSGeo/gdal gdal-$GDALVERSION
     cd gdal-$GDALVERSION/gdal
@@ -99,9 +98,9 @@ elif [ "$GDALVERSION" = "master" ]; then
 else
 
     if $(dpkg --compare-versions "$GDALVERSION" "lt" "2.3"); then
-        PROJOPT="--with-static-proj4=$GDALINST/gdal-$GDALVERSION";
+        PROJOPT=PROJOPT="--with-static-proj4=$PROJINST/proj-$PROJVERSION";
     else
-        PROJOPT="--with-proj=$GDALINST/gdal-$GDALVERSION";
+        PROJOPT="--with-proj=$PROJINST/proj-$PROJVERSION";
     fi
 
 
@@ -122,6 +121,12 @@ else
 fi
 
 find $GDALINST
+
+echo $GDAL_DATA
+ls -lh $GDAL_DATA
+echo $PROJ_LIB
+ls -lh $PROJ_LIB
+
 
 # change back to travis build dir
 cd $TRAVIS_BUILD_DIR
