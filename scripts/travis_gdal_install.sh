@@ -60,18 +60,19 @@ fi
 
 echo "GDAL VERSION: $GDALVERSION FORCE_GDAL_BUILD: $FORCE_GDAL_BUILD" 
 
-GDAL_DEB_NAME="gdal_${GDALVERSION}_proj_${PROJVERSION}-1_amd64_${DISTRIB_CODENAME}.deb"
-GDAL_DEB_URL="https://rbuffat.github.io/gdal_builder/$GDAL_DEB_NAME"
+GDAL_ARCHIVE_NAME="gdal_${GDALVERSION}_proj_${PROJVERSION}-1_amd64_${DISTRIB_CODENAME}.deb"
+GDAL_ARCHIVE_URL="https://rbuffat.github.io/gdal_builder/gdal_${GDALVERSION}_proj_${PROJVERSION}_${DISTRIB_CODENAME}.tar.gz"
 
-echo "$GDAL_DEB_URL"
+echo "$GDAL_ARCHIVE_URL"
 
-if ( curl -o/dev/null -sfI "https://rbuffat.github.io/gdal_builder/$GDAL_DEB_NAME" ) && [ "$FORCE_GDAL_BUILD" != "yes" ]; then
-#   install deb when available
-  
-  wget "$GDAL_DEB_URL"
-  sudo dpkg -i "$GDAL_DEB_NAME"
-  
-  sudo chown -R travis:travis $GDALINST
+if ( curl -o/dev/null -sfI "$GDAL_ARCHIVE_URL" ) && [ "$FORCE_GDAL_BUILD" != "yes" ]; then
+    echo "Use previously built gdal $GDALVERSION"
+    
+    wget "$GDAL_ARCHIVE_URL"
+    
+    echo "tar -xzvf $GDAL_ARCHIVE_NAME -C $GDALINST"
+    tar -xzvf "$GDAL_ARCHIVE_NAME" -C "$GDALINST"
+
   
 elif [ "$GDALVERSION" = "master" ]; then
 
@@ -120,6 +121,7 @@ else
     fi
 fi
 
+echo "Files in $GDALINST:"
 find $GDALINST
 
 echo $GDAL_DATA

@@ -15,17 +15,19 @@ fi
 
 echo "PROJ VERSION: $PROJVERSION FORCE_GDAL_BUILD: $FORCE_GDAL_BUILD" 
 
-PROJ_DEB_NAME="proj_${PROJVERSION}-1_amd64_${DISTRIB_CODENAME}.deb"
-PROJ_DEB_URL="https://rbuffat.github.io/gdal_builder/$PROJ_DEB_NAME"
+PROJ_ARCHIVE_NAME="proj_${PROJVERSION}_${DISTRIB_CODENAME}.tar.gz"
+PROJ_ARCHIVE_URL="https://rbuffat.github.io/gdal_builder/$PROJ_ARCHIVE_NAME"
 
-echo "$PROJ_DEB_URL"
+echo "$PROJ_ARCHIVE_URL"
 
-if ( curl -o/dev/null -sfI "https://rbuffat.github.io/gdal_builder/$PROJ_DEB_NAME" ) && [ "$FORCE_GDAL_BUILD" != "yes" ]; then
+if ( curl -o/dev/null -sfI "$PROJ_ARCHIVE_URL" ) && [ "$FORCE_GDAL_BUILD" != "yes" ]; then
 
-    # We install proj deb if available
-    wget "$PROJ_DEB_URL"
-    sudo dpkg -i "$PROJ_DEB_NAME"
-    sudo chown -R travis:travis $PROJINST
+    echo "Use previously built proj $PROJVERSION"
+    
+    wget "$PROJ_ARCHIVE_URL"
+    
+    echo "tar -xzvf $PROJ_ARCHIVE_NAME -C $PROJINST"
+    tar -xzvf "$PROJ_ARCHIVE_NAME" -C "$PROJINST"
 
 else
 # Otherwise we compile proj from source
@@ -44,6 +46,7 @@ else
 
 fi
 
+echo "Files in $PROJINST:"
 find $PROJINST
 
 # change back to travis build dir
