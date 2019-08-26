@@ -99,7 +99,7 @@ elif [ "$GDALVERSION" = "master" ]; then
 else
 
     if $(dpkg --compare-versions "$GDALVERSION" "lt" "2.3"); then
-        PROJOPT=PROJOPT="--with-static-proj4=$PROJINST/proj-$PROJVERSION";
+        PROJOPT="--with-static-proj4=$PROJINST/proj-$PROJVERSION";
     else
         PROJOPT="--with-proj=$PROJINST/proj-$PROJVERSION";
     fi
