@@ -5,7 +5,7 @@ language: python
 sudo: true
 
 python:
-  #- "2.7"
+  - "2.7"
   - "3.6"
 
 services:
@@ -22,29 +22,29 @@ env:
 
 
   matrix:
+
     - GDALVERSION="1.11.5" PROJVERSION="4.8.0"
-    #- GDALVERSION="2.0.3" PROJVERSION="4.9.3"
-    #- GDALVERSION="2.1.4" PROJVERSION="4.9.3"
-    #- GDALVERSION="2.2.4" PROJVERSION="4.9.3"
-    #- GDALVERSION="2.3.3" PROJVERSION="4.9.3"
+    - GDALVERSION="2.0.3" PROJVERSION="4.9.3"
+    - GDALVERSION="2.1.4" PROJVERSION="4.9.3"
+    - GDALVERSION="2.2.4" PROJVERSION="4.9.3"
+    - GDALVERSION="2.3.3" PROJVERSION="4.9.3"
     - GDALVERSION="2.4.2" PROJVERSION="4.9.3"
     - GDALVERSION="3.0.1" PROJVERSION="6.1.1"
-    #- GDALVERSION="master" PROJVERSION="6.1.1"
+    - GDALVERSION="master" PROJVERSION="6.1.1"
 
     - GDALVERSION="1.11.5" PROJVERSION="4.8.0" FORCE_GDAL_BUILD="yes"
-    #- GDALVERSION="2.0.3" PROJVERSION="4.9.3" FORCE_GDAL_BUILD="yes"
-    #- GDALVERSION="2.1.4" PROJVERSION="4.9.3" FORCE_GDAL_BUILD="yes"
-    #- GDALVERSION="2.2.4" PROJVERSION="4.9.3" FORCE_GDAL_BUILD="yes"
-    #- GDALVERSION="2.3.3" PROJVERSION="4.9.3" FORCE_GDAL_BUILD="yes"
+    - GDALVERSION="2.0.3" PROJVERSION="4.9.3" FORCE_GDAL_BUILD="yes"
+    - GDALVERSION="2.1.4" PROJVERSION="4.9.3" FORCE_GDAL_BUILD="yes"
+    - GDALVERSION="2.2.4" PROJVERSION="4.9.3" FORCE_GDAL_BUILD="yes"
+    - GDALVERSION="2.3.3" PROJVERSION="4.9.3" FORCE_GDAL_BUILD="yes"
     - GDALVERSION="2.4.2" PROJVERSION="4.9.3" FORCE_GDAL_BUILD="yes"
     - GDALVERSION="3.0.1" PROJVERSION="6.1.1" FORCE_GDAL_BUILD="yes"
-    #- GDALVERSION="master" PROJVERSION="6.1.1" FORCE_GDAL_BUILD="yes"
+    - GDALVERSION="master" PROJVERSION="6.1.1" FORCE_GDAL_BUILD="yes"
 
 matrix:
   allow_failures:
-    - env:
-      - GDALVERSION="master" PROJVERSION="6.1.1"
-      - GDALVERSION="master" PROJVERSION="6.1.1" FORCE_GDAL_BUILD="yes"
+    - env: GDALVERSION="master" PROJVERSION="6.1.1"
+    - env: GDALVERSION="master" PROJVERSION="6.1.1" FORCE_GDAL_BUILD="yes"
 
 
 addons:
@@ -60,24 +60,25 @@ addons:
     
 before_install:
   - export DISTRIB_CODENAME=$(lsb_release -cs)
-  - export PROJ_DEBUG=ON
-  - export CPL_DEBUG=True
-  - python -m pip install -U pip
-  - python -m pip install wheel
+  - pip install -U pip
+  - pip install wheel coveralls>=1.1 --upgrade
+  - pip install setuptools==36.0.1
+  - pip install wheel
   - export PATH=$GDALINST/gdal-$GDALVERSION/bin:$PROJINST/proj-$PROJVERSION/bin:$PATH
   - export LD_LIBRARY_PATH=$GDALINST/gdal-$GDALVERSION/lib:$PROJINST/proj-$PROJVERSION/lib:$LD_LIBRARY_PATH
-  - export GDAL_DATA=$GDALINST/gdal-$GDALVERSION/share/gdal
-  - export PROJ_LIB=$PROJINST/proj-$PROJVERSION/share/proj
-  # TODO revert removal of travis_wait 20
   - . ./scripts/travis_proj_install.sh
   - . ./scripts/travis_gdal_install.sh
+  - export GDAL_DATA=$GDALINST/gdal-$GDALVERSION/share/gdal
+  - export PROJ_LIB=$PROJINST/proj-$PROJVERSION/share/proj
+  - gdal-config --version
 
 
 install:
+  - pip install --upgrade --force-reinstall -r requirements-dev.txt
+  - pip uninstall -y rasterio
   - "if [ \"$GDALVERSION\" == \"master\" -o $(gdal-config --version) == \"$GDALVERSION\" ]; then echo \"Using gdal $GDALVERSION\"; else echo \"NOT using gdal $GDALVERSION as expected; aborting\"; exit 1; fi"
   - "python -m pip install --upgrade --force-reinstall -r requirements-dev.txt"
   - "GDAL_CONFIG=$GDALINST/gdal-$GDALVERSION/bin/gdal-config python -m pip install --upgrade --force-reinstall --no-use-pep517 -e .[test,plot]"
-  - "python -m pip install coveralls>=1.1"
   - "rio --version"
   - "rio --gdal-version"
   - "python -m pip list"
