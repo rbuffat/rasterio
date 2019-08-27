@@ -125,6 +125,8 @@ fi
 
 echo "Files in $GDALINST:"
 find $GDALINST
+du $GDALINST
+find $GDALINST | wc -l
 
 echo $GDAL_DATA
 ls -lh $GDAL_DATA
