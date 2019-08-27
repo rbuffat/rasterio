@@ -28,6 +28,8 @@ if ( curl -o/dev/null -sfI "$PROJ_ARCHIVE_URL" ) && [ "$FORCE_GDAL_BUILD" != "ye
     
     echo "tar -xzvf $PROJ_ARCHIVE_NAME -C $PROJINST"
     tar -xzvf "$PROJ_ARCHIVE_NAME" -C "$PROJINST"
+    sudo chown -R travis:travis "$PROJINST"
+    sudo chmod 777 -R "$PROJINST"
 
 else
 # Otherwise we compile proj from source

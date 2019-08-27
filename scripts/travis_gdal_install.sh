@@ -72,6 +72,8 @@ if ( curl -o/dev/null -sfI "$GDAL_ARCHIVE_URL" ) && [ "$FORCE_GDAL_BUILD" != "ye
     
     echo "tar -xzvf $GDAL_ARCHIVE_NAME -C $GDALINST"
     tar -xzvf "$GDAL_ARCHIVE_NAME" -C "$GDALINST"
+    sudo chown -R travis:travis "$GDALINST"
+    sudo chmod 777 -R "$GDALINST"
 
   
 elif [ "$GDALVERSION" = "master" ]; then
